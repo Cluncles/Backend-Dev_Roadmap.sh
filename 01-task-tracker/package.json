@@ -1,0 +1,11 @@
+{
+  "name": "task-tracker",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "main": "index.js",
+  "bin": {
+    "task-cli": "./index.js"
+  },
+  "dependencies": {}
+}
