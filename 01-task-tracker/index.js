@@ -18,4 +18,33 @@
         }
     }
 
-    readTasks();
+    function saveTasks(tasks) {
+        try {
+            fs.writeFileSync(FILE_PATH, JSON.stringify(tasks, null, 2), 'utf8');
+        } catch (error) {
+            console.error("Error saving tasks:", error.message);
+        }
+    }
+
+    function addTask(description) {
+        if (!description) {
+            console.error("Error: Please provide a task description.");
+            return;
+        }
+        const tasks = readTasks();
+        const id = tasks.length > 0 ? Math.max(...tasks.map(t => t.id)) + 1 : 1;
+        const now = new Date().toISOString();
+
+        const newTask = {
+            id,
+            description,
+            status: 'todo',
+            createdAt: now,
+            updatedAt: now
+        };
+        tasks.push(newTask);
+        saveTasks(tasks);
+        console.log(`Task added successfully (ID: ${id})`);
+    }
+
+    addTask("Finish the project documentation");
