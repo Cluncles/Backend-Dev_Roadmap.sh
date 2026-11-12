@@ -1,0 +1,102 @@
+TASK TRACKER PSEUDOCODE
+
+START PROGRAM
+    Set the path to the tasks data file
+
+FUNCTION readTasks
+    IF the data file does not exist
+        RETURN an empty task list
+    TRY to read and parse the file as JSON
+        RETURN the parsed task list
+    IF reading or parsing fails
+        Show an error
+        RETURN an empty task list
+
+FUNCTION saveTasks(tasks)
+    TRY to write tasks to the data file as formatted JSON
+    IF saving fails
+        Show an error
+
+FUNCTION addTask(description)
+    IF description is missing
+        Show an error and stop
+    Read all tasks
+    Choose an ID greater than every existing task ID
+    Create a task with the description, todo status, and current timestamps
+    Add the new task to the list
+    Save the list
+    Report the new task ID
+
+FUNCTION normalizeTaskId(id)
+    IF id is empty, null, or undefined
+        RETURN null
+    Convert the incoming ID to an integer
+    IF conversion fails
+        RETURN null
+    RETURN the integer version of the ID
+
+FUNCTION updateTask(id, description)
+    taskId = normalizeTaskId(id)
+    IF taskId is null or description is missing
+        Show an error and stop
+    Read all tasks
+    Find the task whose ID matches taskId
+    IF no task is found
+        Show an error and stop
+    Replace the task description and update its timestamp
+    Save the list
+    Report success
+
+FUNCTION deleteTask(id)
+    taskId = normalizeTaskId(id)
+    IF taskId is null
+        Show an error and stop
+    Read all tasks
+    Remove the task whose ID matches taskId
+    IF no task was removed
+        Show an error and stop
+    Save the list
+    Report success
+
+FUNCTION updateStatus(id, status)
+    taskId = normalizeTaskId(id)
+    IF taskId is null
+        Show an error and stop
+    Read all tasks
+    Find the task whose ID matches taskId
+    IF no task is found
+        Show an error and stop
+    Set the task status and update its timestamp
+    Save the list
+    Report the new status
+
+FUNCTION listTasks(optional statusFilter)
+    Read all tasks
+    IF a status filter was provided
+        Keep only tasks with that status
+    IF the resulting list is empty
+        Report that no tasks were found
+        Stop
+    Display each task's ID, description, status, and creation date
+
+CLI COMMAND ROUTING
+    Read the command and its arguments from the command line
+    IF command is add
+        Call addTask with the description
+    ELSE IF command is update
+        Call updateTask with the ID and new description
+    ELSE IF command is delete
+        Call deleteTask with the ID
+    ELSE IF command is mark-in-progress
+        Call updateStatus with the ID and in-progress status
+    ELSE IF command is mark-done
+        Call updateStatus with the ID and done status
+    ELSE IF command is list
+        IF the filter is not todo, in-progress, or done
+            Show an invalid-filter error
+        ELSE
+            Call listTasks with the optional filter
+    ELSE
+        Display command usage instructions
+
+END PROGRAM
